@@ -53,6 +53,7 @@ def lowerbound(tn, ln, wnm, a_pi, pi_, en_,mk_, m_mu, betamuk_,beta_mu, nuk_, nu
     H8 = np.sum((gammaln(ak_) - (ak_-1.)*psi(ak_) - np.log(bk_) + ak_))
     E7 = np.sum((1./2*(np.log(beta_tau)+loglambdak-np.log(2*math.pi)-beta_tau*ak_/bk_*(mtauk_-m_tau)**2-beta_tau/betatauk_)))
     E8 = np.sum((a_lambda*np.log(b_lambda) - gammaln(a_lambda) + (a_lambda-1.)*loglambdak - b_lambda*ak_/bk_))
+
     E11 = np.sum([-log_beta_function(arr_a_theta) + np.dot((arr_a_theta-np.ones(T)), dirichlet_expectation(thetak_[k,:])) for k in xrange(K)])
     H11 = np.sum([log_beta_function(thetak_[k,:]) - np.dot((thetak_[k,:]-np.ones(T)),dirichlet_expectation(thetak_[k,:])) for k in xrange(K)])
 

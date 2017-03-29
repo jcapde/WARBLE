@@ -1,27 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import numpy as np
-from pandas import DataFrame, read_pickle
-import matplotlib.pyplot as plt
-import pyproj
-from datetime import datetime
-import scipy.fftpack
-import scipy.ndimage
-from gensim.models import LdaModel
-from gensim.corpora import Dictionary
-from nltk.corpus import stopwords
-from collections import defaultdict
-import pyproj, re
-import sys
+
 import pickle
+import sys
+from collections import defaultdict
+from datetime import datetime
+import matplotlib.pyplot as plt
+import numpy as np
+import pyproj
+import re
+import scipy.ndimage
+from gensim.corpora import Dictionary
+from gensim.models import LdaModel
+from nltk.corpus import stopwords
+from pandas import DataFrame, read_pickle
 
 if __name__ == "__main__":
 
     # Load tweets
     df = read_pickle('./data/input/full_dataset.pkl')
-    dftagged = DataFrame.from_csv('./data/input/labeled_events.csv', sep =";")
+    df_tagged = DataFrame.from_csv('./data/input/labeled_events.csv', sep = ";")
 
-    dfcomp = df.merge(dftagged, how="left", on="tweet_id")
+    dfcomp = df.merge(df_tagged, how="left", on="tweet_id")
     dfcomp.tclass = dfcomp.tclass.fillna("-- Background")
 
     # Select one day tweets
