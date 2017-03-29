@@ -1,7 +1,19 @@
-# The Warble model for event detection in Twitter
+# WARBLE: A Probabilistic Model for Retrospective Event Detection in Twitter.
 
-This repository contains all scripts to reproduce the article titled *Tuning up probabilistic models for event detection in
-social networks*. Next, we summarize the main scripts.
+This repository contains the WARBLE code, which implements the probabilistic model and learning scheme presented in:
+
+```
+@article{Capdevila-DAMI-2017,
+  author = {Joan Capdevila and Jes{\'u}s Cerquides and Jordi Torres},
+  title = {Mining Urban Events in the Tweet Stream through a Probabilistic Mixture Model},
+  booktitle = {Data Mining and Knowledge Discovery (DAMI)},
+  year = 2017,
+  pages = {x--x}
+}
+```
+
+* *download_tweets.py* Given a list of tweet IDs, this script call the Twitter API and downloads the whole metadata for each tweet and
+stores in *data/input/ folder*.
 
 * *preprocess_tweets.py* takes raw input datasets from data/input/ folder and generates a series of processed files in data/input/ folder
 that will be used by *train_all.py* file.
