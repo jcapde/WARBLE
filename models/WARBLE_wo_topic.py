@@ -36,7 +36,8 @@ def lowerbound(values, bins, H, xedges, yedges, tn, ln, wnm, a_pi, pi_, en_,mk_,
         ybin = np.digitize(np.array([ln[n,1]]),yedges)[0]-2
         E3 += en_[n,(K-1)]*np.log(H[xbin,ybin]+ np.finfo(np.float32).eps)
         E6 += 1./2*np.dot(en_[n,0:(K-1)],loglambdak[0:(K-1)]-np.log(2.*math.pi)-1./betatauk_[0:(K-1)]-ak_[0:(K-1)]/bk_[0:(K-1)]*(tn[n]-mtauk_[0:(K-1)])**2)
-        E6 += en_[n,(K-1)]*np.log(values[np.digitize(np.array([tn[n]]),bins)[0]-1])
+        # I have changed -1 to -2 but not sure why it was -1 before. The same for the update.
+        E6 += en_[n,(K-1)]*np.log(values[np.digitize(np.array([tn[n]]),bins)[0]-2])
         E9 += np.dot(en_[n, :], np.dot(znm_[n, wordids, :]*CNTS, Elogtheta_.T).sum(axis=0))
         H9 += -np.sum(znm_[n, wordids,:]*log_(znm_[n, wordids, :])*CNTS)
         E10 += np.sum(znm_[n, wordids,:]*log_(Phi[:, wordids]).T*CNTS)
@@ -117,7 +118,7 @@ def inference_blei_wback(It, tn, ln, wnm, a_pi, T, K, m_mu, beta_mu, W_Delta, nu
             xbin = np.digitize(np.array([ln[n,0]]),xedges)[0]-2
             ybin = np.digitize(np.array([ln[n,1]]),yedges)[0]-2
             aux[K-1] *= (H[xbin, ybin] + np.finfo(np.float32).eps)
-            zbin = np.digitize(np.array([tn[n]]),bins)[0]-1
+            zbin = np.digitize(np.array([tn[n]]),bins)[0]-2
             aux[K-1] *= (values[zbin]+ np.finfo(np.float32).eps)
             # Textual
             aux *= np.exp(np.dot(np.reshape(cnts,(1, len(wordids))), np.dot(znm_[n, wordids, :],Elogtheta_.T)))[0]

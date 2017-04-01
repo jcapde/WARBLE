@@ -1,7 +1,7 @@
 class Tweet_SCAN:
     def __init__(self):
         return
-    def run(self,A,B,C,D, Eps1,Eps2,Eps3, MinPts, uparam=0.5):
+    def run(self, A, B, C, D, Eps1, Eps2, Eps3, MinPts, uparam=0.5):
         def kldiv(doc0, doc1):
             accum=0
             import math

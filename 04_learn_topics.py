@@ -50,6 +50,7 @@ def get_theta(LDA, Corpus, T):
         for topic in doc:
             C[i, topic[0]] = topic[1]
 
+    return C
 
 if __name__ == "__main__":
 
@@ -60,14 +61,14 @@ if __name__ == "__main__":
     T = args.T
 
     vocabulary = pickle.load(open('data/tmp/vocabulary.pkl','rb'))
-    corpus = pickle.load(open('data/tmp/corpus.pkl','rb'))
-    corpus = aggregate_by_keyword(corpus, vocabulary)
+    or_corpus = pickle.load(open('data/tmp/corpus.pkl','rb'))
+    corpus = aggregate_by_keyword(or_corpus, vocabulary)
     LDA = LdaModel(corpus, num_topics=T, id2word=vocabulary, passes=10)
     for topic in LDA.print_topics(num_topics=T, num_words=10):
         print topic
     Phi = build_topic_matrix(LDA, T, vocabulary)
 
-    Theta = get_theta(LDA, corpus, T)
+    Theta = get_theta(LDA, or_corpus, T)
 
     pickle.dump(Phi, open('data/tmp/Phi.pkl', 'wb'))
     pickle.dump(Theta, open('data/tmp/Theta.pkl', 'wb'))
