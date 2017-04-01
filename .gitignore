@@ -1,1 +1,8 @@
 *.pyc
+.idea/
+data/input/Twitter-DS_MERCE_2014_tweets.json
+data/input/Twitter-DS_MERCE_2015_tweets.json
+docs/
+data/input/Twitter-DS_MERCE_2015_tweets.pkl
+data/input/Twitter-DS_MERCE_2014_tweets.pkl
+data/tmp/*

@@ -16,7 +16,6 @@ if __name__ == "__main__":
     tn_std = np.load('data/input/tn_std.npy')
     wnm = np.load('data/input/wnm.npy')
     Phi = np.load('data/input/Phi.npy')
-    lab = np.load('data/input/label.npy')
     xedges = np.load('data/input/xedges.npy')
     yedges = np.load('data/input/yedges.npy')
     H = np.load('data/input/H.npy')
@@ -25,6 +24,10 @@ if __name__ == "__main__":
     dfcomp = pickle.load(open('data/input/dfcomp.pkl','rb'))
     C = np.load('data/input/C.npy')
     D = pickle.load(open('data/input/D.pkl','rb'))
+
+    lab = np.zeros(N)
+    for i, c in enumerate(list(set(dfcomp.tclass))):
+        lab[np.where(dfcomp.tclass==c)[0]] = i
 
     # INFERENCE
     # Maximum number of iterations

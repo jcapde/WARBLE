@@ -1,7 +1,9 @@
 appdirs==1.4.3
+argparse==1.4.0
 cycler==0.10.0
 functools32==3.2.3.post2
 gensim==1.0.1
+interfaces==0.0.4
 matplotlib==2.0.0
 numpy==1.12.1
 nltk==3.2.2
