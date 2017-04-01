@@ -3,8 +3,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import pickle
-import argparse
 
 from pandas import read_pickle
 from mpl_toolkits.mplot3d import Axes3D
@@ -12,9 +10,9 @@ from mpl_toolkits.mplot3d import Axes3D
 
 if __name__ == "__main__":
 
-    purity_arr = np.loadtxt('data/output/purity_wback.txt')
-    inv_purity_arr = np.loadtxt('data/output/inv_purity_wback.txt')
-    f_measure_arr = np.loadtxt('data/output/f_measure_wback.txt')
+    purity_arr = np.loadtxt('data/output/purity.txt')
+    inv_purity_arr = np.loadtxt('data/output/inv_purity.txt')
+    f_measure_arr = np.loadtxt('data/output/f_measure.txt')
     en_arr = np.load('data/output/event_assignments.npy')
 
     dataset = read_pickle('data/tmp/dataset.pkl')
