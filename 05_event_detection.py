@@ -99,8 +99,6 @@ if __name__ == "__main__":
     event_assig[4, :] = res_df["class"].values
     event_assig[4, np.where(event_assig[4, :] == -1)[0]] = (event_assig[4, :].max() + 1)
 
-
-
     ## Save results
     pickle.dump(event_assig, open('data/output/event_assignments.npy','wb'))
     pickle.dump(lwbound, open('data/output/lwbounds.pkl', 'wb'))
