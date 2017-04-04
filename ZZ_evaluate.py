@@ -76,7 +76,7 @@ if __name__ == "__main__":
     epsilon1 = 250./np.linalg.norm(ln_std)
     epsilon2 = 3600./tn_std
     epsilon3 = 0.9
-    MinPts = 7
+    MinPts = 6
 
     REP = 10
     purity_arr = np.zeros((REP,5))
@@ -121,9 +121,9 @@ if __name__ == "__main__":
         purity_arr[r, 4], inv_purity_arr[r, 4], f_measure_arr[r, 4] = pr, re, f
 
     ## Save results
-    pickle.dump(event_assig, open('data/output/event_assignments_'+REP+'.npy','wb'))
-    np.savetxt('data/output/purity_'+REP+'.txt', purity_arr)
-    np.savetxt('data/output/inv_purity_'+REP+'.txt', inv_purity_arr)
-    np.savetxt('data/output/f_measure_'+REP+'.txt', f_measure_arr)
+    pickle.dump(event_assig, open('data/output/event_assignments_'+str(REP)+'.npy','wb'))
+    np.savetxt('data/output/purity_'+str(REP)+'.txt', purity_arr)
+    np.savetxt('data/output/inv_purity_'+str(REP)+'.txt', inv_purity_arr)
+    np.savetxt('data/output/f_measure_'+str(REP)+'.txt', f_measure_arr)
 
 

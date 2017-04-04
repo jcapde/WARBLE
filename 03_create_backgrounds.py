@@ -99,9 +99,8 @@ def compute_daily_space_time_histograms(dataset, day, ndays, tn_mean, tn_std, ln
 
     avg_time = np.zeros(1)
     avg_loc = np.zeros((1,2))
-    # Background models
 
-    print dataset.tail()
+
     for i in xrange(ndays):
 
         th_l = day + timedelta(days=i)
@@ -137,7 +136,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Preprocess tweets')
     parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2014_tweets.pkl')
     parser.add_argument('-day', metavar='day', type=str, default='19/09/2014')
-    parser.add_argument('-ndays', metavar='ndays', type=int, default=4)
+    parser.add_argument('-ndays', metavar='ndays', type=int, default=3)
     parser.add_argument('-plots', metavar='plots', type=bool, default=False)
     args = parser.parse_args()
     fileName = args.fileName

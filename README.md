@@ -12,6 +12,8 @@ This repository contains the WARBLE code, which implements the probabilistic mod
 }
 ```
 
+``1- pip install -r requirements.txt ´´
+
 * *download_tweets.py* Given a list of tweet IDs, this script call the Twitter API and downloads the whole metadata for each tweet and
 stores in *data/input/ folder*.
 
