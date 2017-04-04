@@ -135,7 +135,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Preprocess tweets')
     parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2014_tweets.pkl')
-    parser.add_argument('-day', metavar='day', type=str, default='19/09/2014')
+    parser.add_argument('-day', metavar='day', type=str, default='20/09/2014')
     parser.add_argument('-ndays', metavar='ndays', type=int, default=3)
     parser.add_argument('-plots', metavar='plots', type=bool, default=False)
     args = parser.parse_args()

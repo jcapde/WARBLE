@@ -13,14 +13,16 @@ def precision(clust, tagged):
     accum = 0
     for i in set(clust.cluster):
         clusti  = clust.ix[clust.cluster==i, :]
-        accum += len(clusti)*max([precisionij(tagged.ix[tagged.tclass == j,:], clusti) for j in set(tagged.tclass)])
+        precisions = [precisionij(tagged.ix[tagged.tclass == j,:], clusti) for j in set(tagged.tclass)]
+        accum += len(clusti)*max(precisions)
     return accum*1./len(clust)
 
 def recall(clust, tagged):
     accum = 0
     for i in set(tagged.tclass):
         taggedi  = tagged.ix[tagged.tclass==i, :]
-        accum += len(taggedi)*max([recallij(taggedi,clust.ix[clust.cluster == j, :]) for j in set(clust.cluster)])
+        recalls = [recallij(taggedi,clust.ix[clust.cluster == j, :]) for j in set(clust.cluster)]
+        accum += len(taggedi)*max(recalls)
     return accum*1./len(tagged)
 
 def f_ij(taggedi, clustj):
@@ -47,7 +49,7 @@ def evaluate_wback(dfcomp, en_est):
     dfcomp["cluster"] = en_est
     Knoise = np.argmax(np.bincount(en_est.astype(int)))
     clust = dfcomp.ix[dfcomp["cluster"]!=Knoise,("tweet_id","cluster")]
-    clas = dfcomp.ix[(dfcomp["tclass"]!="-- Background"),("tweet_id","tclass")]
+    clas = dfcomp.ix[(dfcomp["tclass"]!="NonEvent"),("tweet_id","tclass")]
     purity = precision(clust,  clas)
     inv_purity = recall(clust, clas)
     f = f_measure(purity, inv_purity)
@@ -57,7 +59,7 @@ def evaluate_recall_event(dfcomp,en_est):
     dfcomp["cluster"] = en_est
     Knoise = np.argmax(np.bincount(en_est.astype(int)))
     clust = dfcomp.ix[dfcomp["cluster"]!=Knoise,("tweet_id","cluster")]
-    clas = dfcomp.ix[(dfcomp["tclass"]!="-- Background"),("tweet_id","tclass")]
+    clas = dfcomp.ix[(dfcomp["tclass"]!="NonEvent"),("tweet_id","tclass")]
     accum = []
     for i in set(clas.tclass):
         taggedi  = clas.ix[clas.tclass==i, :]

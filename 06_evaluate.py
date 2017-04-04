@@ -1,32 +1,42 @@
 import pickle
-from functions.ev_functions_BCubed import *
+import argparse
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser(description='Evaluate clustering with extrisinc measures')
+    parser.add_argument('-BCubed', metavar='BCubed', type=bool, default=False)
+
     dataset = pickle.load(open('data/tmp/dataset.pkl','rb'))
     event_assig = pickle.load(open('data/output/event_assignments.npy', 'rb'))
+    args = parser.parse_args()
+    bcubed = args.BCubed
+
+    if bcubed:
+        from functions.ev_functions_BCubed import *
+    else:
+        from functions.ev_functions import *
 
     purity_arr = np.zeros(5)
     inv_purity_arr = np.zeros(5)
     f_measure_arr = np.zeros(5)
 
-    pr, re, f = evaluate(dataset, event_assig[0,:])
+    pr, re, f = evaluate_wback(dataset, event_assig[0,:])
     purity_arr[0], inv_purity_arr[0], f_measure_arr[0] = pr, re, f
     print "Mcinerney & Blei model -", " Purity: ", pr, " Inv. Purity: ", re, " F-measure:", f
 
-    pr, re, f = evaluate(dataset, event_assig[1,:])
+    pr, re, f = evaluate_wback(dataset, event_assig[1,:])
     purity_arr[1], inv_purity_arr[1], f_measure_arr[1] = pr, re, f
     print "WARBLE model without simulatenous topic learning model -", " Inv. Purity: ", pr, " Recall: ", re, " F-measure:", f
 
-    pr, re, f = evaluate(dataset, event_assig[2,:])
+    pr, re, f = evaluate_wback(dataset, event_assig[2,:])
     purity_arr[2], inv_purity_arr[2], f_measure_arr[2] = pr, re, f
     print "WARBLE model without background -", " Purity: ", pr, " Inv. Purity: ", re, " F-measure:", f
 
-    pr, re, f = evaluate(dataset, event_assig[3,:])
+    pr, re, f = evaluate_wback(dataset, event_assig[3,:])
     purity_arr[3], inv_purity_arr[3], f_measure_arr[3] = pr, re, f
     print "WARBLE model -", " Purity: ", pr, " Inv. Purity: ", re, " F-measure:", f
 
-    pr, re, f = evaluate(dataset, event_assig[4,:])
+    pr, re, f = evaluate_wback(dataset, event_assig[4,:])
     purity_arr[4], inv_purity_arr[4], f_measure_arr[4] = pr, re, f
     print "Tweet-SCAN -", " Purity: ", pr, " Inv. Purity: ", re, " F-measure:", f
 

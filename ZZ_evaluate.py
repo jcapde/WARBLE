@@ -78,7 +78,7 @@ if __name__ == "__main__":
     epsilon3 = 0.9
     MinPts = 6
 
-    REP = 10
+    REP = 3
     purity_arr = np.zeros((REP,5))
     inv_purity_arr = np.zeros((REP,5))
     f_measure_arr = np.zeros((REP,5))
@@ -91,25 +91,25 @@ if __name__ == "__main__":
         print("Mcinerney & Blei model ----------------")
         en_, _ = inference_blei(maxIter, tn, ln, w, a_pi, T, K, m_mu, beta_mu, W_Delta, nu_Delta, m_tau, beta_tau, a_lambda, b_lambda, a_theta, Phi)
         event_assig[r, 0, :] = map_estimate(en_)
-        pr, re, f = evaluate(dataset, event_assig[r, 0,:])
+        pr, re, f = evaluate_wback(dataset, event_assig[r, 0,:])
         purity_arr[r, 0], inv_purity_arr[r, 0], f_measure_arr[r, 0] = pr, re, f
 
         print("WARBLE model w/o simulatenous topic learning model ----------------")
         en_, _ = inference_blei_wback(maxIter, tn, ln, w, a_pi, T, K, m_mu, beta_mu, W_Delta, nu_Delta, m_tau, beta_tau, a_lambda, b_lambda, a_theta, Phi, HistTemp, ts, HistLoc, xs, ys)
         event_assig[r, 1, :] = map_estimate(en_)
-        pr, re, f = evaluate(dataset, event_assig[r, 1,:])
+        pr, re, f = evaluate_wback(dataset, event_assig[r, 1,:])
         purity_arr[r, 1], inv_purity_arr[r, 1], f_measure_arr[r, 1] = pr, re, f
 
         print("WARBLE model w/o background model ----------------")
         en_, _ = inference_joint(maxIter, tn, ln, w, a_pi, T, K, m_mu, beta_mu, W_Delta, nu_Delta, m_tau, beta_tau, a_lambda, b_lambda, a_theta, a_phi)
         event_assig[r, 2, :] = map_estimate(en_)
-        pr, re, f = evaluate(dataset, event_assig[r, 2,:])
+        pr, re, f = evaluate_wback(dataset, event_assig[r, 2,:])
         purity_arr[r, 2], inv_purity_arr[r, 2], f_measure_arr[r, 2] = pr, re, f
 
         print("WARBLE model ----------------")
         en_, _ = inference_wback(maxIter, tn, ln, w, a_pi, T, K, m_mu, beta_mu, W_Delta, nu_Delta, m_tau, beta_tau, a_lambda, b_lambda, a_theta, a_phi, HistTemp, ts, HistLoc, xs, ys)
         event_assig[r, 3, :] = map_estimate(en_)
-        pr, re, f = evaluate(dataset, event_assig[r, 3,:])
+        pr, re, f = evaluate_wback(dataset, event_assig[r, 3,:])
         purity_arr[r, 3], inv_purity_arr[r, 3], f_measure_arr[r, 3] = pr, re, f
 
         print("Tweet-SCAN ----------------")
@@ -117,7 +117,7 @@ if __name__ == "__main__":
         res_df = clust.run(ln, tn, Theta, user_tweet, epsilon1, epsilon2, epsilon3, MinPts, uparam=0.5)
         event_assig[r, 4, :] = res_df["class"].values
         event_assig[r, 4, np.where(event_assig[r, 4, :] == -1)[0]] = (event_assig[r, 4, :].max() + 1)
-        pr, re, f = evaluate(dataset, event_assig[r, 4,:])
+        pr, re, f = evaluate_wback(dataset, event_assig[r, 4,:])
         purity_arr[r, 4], inv_purity_arr[r, 4], f_measure_arr[r, 4] = pr, re, f
 
     ## Save results

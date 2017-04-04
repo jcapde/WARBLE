@@ -76,7 +76,7 @@ if __name__ == "__main__":
     epsilon1 = 250./np.linalg.norm(ln_std)
     epsilon2 = 3600./tn_std
     epsilon3 = 0.9
-    MinPts = 7
+    MinPts = 6
 
     ## Run models
     lwbound = [None]*4
