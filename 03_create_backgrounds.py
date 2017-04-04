@@ -7,6 +7,7 @@ import argparse
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 from  scipy.ndimage import gaussian_filter
 from scipy.fftpack import rfft, rfftfreq, irfft
@@ -15,28 +16,50 @@ from datetime import datetime, timedelta
 from pandas import read_pickle
 
 
-def spatial_Gaussian_filtering(avg_loc):
+def spatial_Gaussian_filtering(avg_loc, plots):
 
     # Spatial Gaussian filter
+    fig = plt.figure(figsize=(10,5))
+
+    a = fig.add_subplot(1, 2, 1)
     H, xedges, yedges = np.histogram2d(avg_loc[1:,0], avg_loc[1:,1], bins=(40, 40), normed = True)
     H = np.copy(H.T)
-    im = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
-    plt.show()
+    plt.tick_params(axis=u'both', which=u'both',bottom=u'off', left=u'off', labelbottom=u'off', labelleft=u'off')
+    plt.xlabel("longitude")
+    plt.ylabel("latitude")
+    plt.imshow(H, interpolation='none', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
+
+    a = fig.add_subplot(1, 2, 2)
     Hout = gaussian_filter(H, 1.5)
     H = np.copy(Hout)
-    np.abs(xedges[:len(xedges)-1]-xedges[1:])[0]*np.abs(yedges[:len(yedges)-1]-yedges[1:])[0]*np.sum(H)
-    im = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
-    plt.show()
-    H = np.copy(H.T)
+    plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
+    plt.tick_params(axis=u'both', which=u'both', bottom=u'off', left=u'off', labelbottom=u'off', labelleft=u'off')
+    plt.xlabel("longitude")
+    plt.ylabel("latitude")
 
+    if plots:
+        plt.show()
+    else:
+        print("Spatial background saved at data/tmp/Fig_spatial_background.pdf")
+        pp = PdfPages('data/tmp/Fig_spatial_background.pdf')
+        pp.savefig()
+        pp.close()
+
+    H = np.copy(H.T)
     return xedges, yedges, H
 
 
-def temporal_FFT_IFFT(avg_time):
+def temporal_FFT_IFFT(avg_time, plots):
+
+    fig = plt.figure(figsize=(10,5))
+
+    a = fig.add_subplot(1, 2, 1)
 
     # Temporal FFT-IFFT
     values, bins, patch = plt.hist(avg_time[1:], bins = 100, normed=True)
-    plt.show()
+    plt.tick_params(axis=u'both', which=u'both', bottom=u'off',  labelbottom=u'off')
+    plt.xlabel("time")
+
     w = rfft(values)
     f = rfftfreq(len(values), bins[1]-bins[0])
 
@@ -45,8 +68,18 @@ def temporal_FFT_IFFT(avg_time):
     w[cutoff_idx] = 0
     y = irfft(w)
 
+    a = fig.add_subplot(1, 2, 2)
     plt.plot(bins[0:100], y)
-    plt.show()
+    plt.tick_params(axis=u'both', which=u'both', bottom=u'off',  labelbottom=u'off')
+    plt.xlabel("time")
+
+    if plots:
+        plt.show()
+    else:
+        print("Temporal background saved at data/tmp/Fig_temporal_background.pdf")
+        pp = PdfPages('data/tmp/Fig_temporal_background.pdf')
+        pp.savefig()
+        pp.close()
 
     return bins, y
 
@@ -68,14 +101,14 @@ def compute_daily_space_time_histograms(dataset, day, ndays, tn_mean, tn_std, ln
     avg_loc = np.zeros((1,2))
     # Background models
 
+    print dataset.tail()
     for i in xrange(ndays):
+
         th_l = day + timedelta(days=i)
         th_u = day + timedelta(days=i+1)
-
         selection = dataset.ix[(dataset.time > th_l) & (dataset.time <= th_u),:]
         selection.index = xrange(selection.shape[0])
         selection = selection.sort_values("time")
-
         selection.loc[:,"time"] = (selection["time"].values - min(selection["time"].values))
 
         aux = np.zeros(shape=(selection.shape[0], 2))
@@ -105,19 +138,21 @@ if __name__ == "__main__":
     parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2014_tweets.pkl')
     parser.add_argument('-day', metavar='day', type=str, default='19/09/2014')
     parser.add_argument('-ndays', metavar='ndays', type=int, default=4)
-
+    parser.add_argument('-plots', metavar='plots', type=bool, default=False)
     args = parser.parse_args()
     fileName = args.fileName
     day = datetime.strptime(args.day,'%d/%m/%Y')
     ndays = args.ndays
+    plots = args.plots
 
     tn_mean, tn_std, ln_mean, ln_std = pickle.load(open('data/tmp/spacetime_stats.pkl','rb'))
 
     fulldataset = read_pickle('data/input/' + fileName)
+
     avg_time, avg_loc = compute_daily_space_time_histograms(fulldataset, day, ndays, tn_mean, tn_std, ln_mean, ln_std)
 
-    xs, ys, HistLoc = spatial_Gaussian_filtering(avg_loc)
-    ts, HistTemp =  temporal_FFT_IFFT(avg_time)
+    xs, ys, HistLoc = spatial_Gaussian_filtering(avg_loc, plots)
+    ts, HistTemp =  temporal_FFT_IFFT(avg_time, plots)
 
     pickle.dump([xs, ys, HistLoc, ts, HistTemp], open('data/tmp/background.pkl','wb'))
 

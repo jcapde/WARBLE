@@ -165,6 +165,7 @@ if __name__ == "__main__":
     # Build dataset
     dataset = build_dataset(fileName, labelTweets)
     print dataset.shape
+    #print dataset.sort_values("time").tail()
 
     # Filter out tweets
     dataset = filter_by_day(dataset, day)
@@ -194,7 +195,7 @@ if __name__ == "__main__":
     user_tweet = user_tweet_matrix(dataset)
 
     #Create for tweets-SCAN
-    pickle.dump([tn_mean, tn_std, ln_mean, ln_std],open('data/tmp/spacetime_stats.pkl', 'wb'))
+    pickle.dump([tn_mean, tn_std, ln_mean, ln_std], open('data/tmp/spacetime_stats.pkl', 'wb'))
     pickle.dump(w, open('data/tmp/w.pkl', 'wb'))
     pickle.dump(dataset, open('data/tmp/dataset.pkl','wb'))
     pickle.dump(vocabulary,open('data/tmp/vocabulary.pkl','wb'))
