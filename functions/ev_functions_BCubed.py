@@ -18,7 +18,7 @@ def Precision_BCubed_wback(dfcomp):
         accum = 0
         clust_len = 0
         for e_ in dfcomp.ix[dfcomp["cluster"] == c,:].index:
-            if dfcomp.ix[e, "tclass"] != "-- Background" or dfcomp.ix[e_, "tclass"] != "-- Background":
+            if dfcomp.ix[e, "tclass"] != "NonEvent" or dfcomp.ix[e_, "tclass"] != "NonEvent":
                 accum += correctness(dfcomp.ix[e,:], dfcomp.ix[e_,:])
                 clust_len +=1
         if clust_len != 0:
@@ -119,14 +119,14 @@ def evaluate_wback(dfcomp, en_est):
     dfcomp["cluster"] = en_est
     Knoise = np.argmax(np.bincount(dfcomp["cluster"].astype(int)))
     pr = Precision_BCubed_wback(dfcomp.ix[(dfcomp["cluster"]!=Knoise),:])
-    re = Recall_BCubed_wback(dfcomp.ix[(dfcomp["tclass"]!="-- Background"),:], Knoise)
+    re = Recall_BCubed_wback(dfcomp.ix[(dfcomp["tclass"]!="NonEvent"),:], Knoise)
     f = F_BCubed(pr, re)
     return pr, re, f
 
 def evaluate_recall_event(dfcomp,en_est):
     dfcomp["cluster"] = en_est
     Knoise = np.argmax(np.bincount(en_est.astype(int)))
-    dfcomp = dfcomp.ix[(dfcomp["tclass"]!="-- Background"),:]
+    dfcomp = dfcomp.ix[(dfcomp["tclass"]!="NonEvent"),:]
     aux = []
 
     for c in set(dfcomp.tclass):

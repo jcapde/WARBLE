@@ -15,27 +15,32 @@ from scipy.fftpack import rfft, rfftfreq, irfft
 from datetime import datetime, timedelta
 from pandas import read_pickle
 
+from mpl_toolkits.basemap import Basemap
+
 
 def spatial_Gaussian_filtering(avg_loc, plots):
 
     # Spatial Gaussian filter
-    fig = plt.figure(figsize=(10,5))
+    plt.rc('font', size=14)
+    plt.figure(figsize=(5,4.5))
 
-    a = fig.add_subplot(1, 2, 1)
+    # a = fig.add_subplot(1, 2, 1)
     H, xedges, yedges = np.histogram2d(avg_loc[1:,0], avg_loc[1:,1], bins=(40, 40), normed = True)
     H = np.copy(H.T)
-    plt.tick_params(axis=u'both', which=u'both',bottom=u'off', left=u'off', labelbottom=u'off', labelleft=u'off')
-    plt.xlabel("longitude")
-    plt.ylabel("latitude")
-    plt.imshow(H, interpolation='none', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
+    # plt.tick_params(axis=u'both', which=u'both',bottom=u'off', left=u'off', labelbottom=u'off', labelleft=u'off')
+    # plt.xlabel("longitude")
+    # plt.ylabel("latitude")
+    # plt.imshow(H, interpolation='none', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
 
-    a = fig.add_subplot(1, 2, 2)
+    #a = fig.add_subplot(1, 2, 2)
     Hout = gaussian_filter(H, 1.5)
     H = np.copy(Hout)
-    plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
+    cax = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
     plt.tick_params(axis=u'both', which=u'both', bottom=u'off', left=u'off', labelbottom=u'off', labelleft=u'off')
     plt.xlabel("longitude")
     plt.ylabel("latitude")
+
+    cbar = plt.colorbar(cax)
 
     if plots:
         plt.show()
@@ -50,10 +55,10 @@ def spatial_Gaussian_filtering(avg_loc, plots):
 
 
 def temporal_FFT_IFFT(avg_time, plots):
+    plt.rc('font', size=14)
+    fig = plt.figure(figsize=(5,5))
 
-    fig = plt.figure(figsize=(10,5))
-
-    a = fig.add_subplot(1, 2, 1)
+    #a = fig.add_subplot(1, 2, 1)
 
     # Temporal FFT-IFFT
     values, bins, patch = plt.hist(avg_time[1:], bins = 100, normed=True)
@@ -68,8 +73,8 @@ def temporal_FFT_IFFT(avg_time, plots):
     w[cutoff_idx] = 0
     y = irfft(w)
 
-    a = fig.add_subplot(1, 2, 2)
-    plt.plot(bins[0:100], y)
+    #a = fig.add_subplot(1, 2, 2)
+    plt.plot(bins[0:100], y, color="red")
     plt.tick_params(axis=u'both', which=u'both', bottom=u'off',  labelbottom=u'off')
     plt.xlabel("time")
 
@@ -136,7 +141,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Preprocess tweets')
     parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2014_tweets.pkl')
     parser.add_argument('-day', metavar='day', type=str, default='20/09/2014')
-    parser.add_argument('-ndays', metavar='ndays', type=int, default=3)
+    parser.add_argument('-ndays', metavar='ndays', type=int, default=4)
     parser.add_argument('-plots', metavar='plots', type=bool, default=False)
     args = parser.parse_args()
     fileName = args.fileName
@@ -154,7 +159,6 @@ if __name__ == "__main__":
     ts, HistTemp =  temporal_FFT_IFFT(avg_time, plots)
 
     pickle.dump([xs, ys, HistLoc, ts, HistTemp], open('data/tmp/background.pkl','wb'))
-
 
 
 

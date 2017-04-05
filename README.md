@@ -12,23 +12,25 @@ This repository contains the WARBLE code, which implements the probabilistic mod
 }
 ```
 
-``1- pip install -r requirements.txt ´´
+1-  Install Python requirements
 
-* *download_tweets.py* Given a list of tweet IDs, this script call the Twitter API and downloads the whole metadata for each tweet and
-stores in *data/input/ folder*.
+```
+pip install -r requirements.txt
 
-* *preprocess_tweets.py* takes raw input datasets from data/input/ folder and generates a series of processed files in data/input/ folder
+```
+
+2- *01_download_tweets.py* crawls the Twitter API with a list of tweet IDs and stores their content in *data/input/ folder*.
+
+3- *02_preprocess_tweets.py* takes the raw input datasets from data/input/ folder and generates a series of processed files in data/input/ folder
 that will be used by *train_all.py* file.
 
-* *train_all.py* applies variational inference to learn the model parameters from the processed tweets. This script executes learning
-for *McInerney&Blei model*, *WARBLE without simulatenous topic learning*, *WARBLE without background*, *WARBLE model* and *Tweet-SCAN*. Files
-containing the learnt parameters are stored in data/output.
+4- *03_create_backgrounds.py* creates the spatio-temporal backgrounds from the original dataset for the specified dates.
 
-* *evaluate_all.py* evaluates all abovementioned models in terms of Purity, Inverse Purity and F-measure.
+5- *04_learn_topics.py* learns topic-word and topic-document distributions to be used for Tweet-SCAN and models without joint topic-event learning scheme.
 
-* *plot_results.py* plots comparative results with the above metrics and visually show the event detection results.
+6- *05_event_detection.py* perform event detection with the 5 models described in the paper: *McInerney&Blei model*, *WARBLE without simulatenous topic learning*, *WARBLE without background*, *WARBLE model* and *Tweet-SCAN*
 
-* functions/ folder contains functions used by the models and the evaluation.
+7- *06_evaluate_all.py* evaluates all abovementioned models in terms of set matching metrics (Purity, Inverse Purity and F-measure) and BCubed metrics (BCubed Precision, BCubed Recall and BCubed F-measure).
 
+8- *07_plot_results.py* plots the above metrics and shows the results in space-time dimensions.
 
-Note that input data is empty given that sharing of datasets is prohibited under Twitter’s API Terms of Service [https://dev.twitter.com/overview/terms/agreement-and-policy]

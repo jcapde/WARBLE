@@ -15,13 +15,12 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Learn topics from tweets')
     parser.add_argument('-T', metavar='T', type=int, default=30)
-    parser.add_argument('-K', metavar='K', type=int, default=7)
+    parser.add_argument('-K', metavar='K', type=int, default=6)
     parser.add_argument('-maxIter', metavar='maxIter', type=int, default=50)
     args = parser.parse_args()
 
 
     ## LOAD DATA
-
     # Dataset
     dataset = pickle.load(open('data/tmp/dataset.pkl','rb'))
     # Word Matrix
