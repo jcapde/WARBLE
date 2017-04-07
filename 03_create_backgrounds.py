@@ -24,15 +24,8 @@ def spatial_Gaussian_filtering(avg_loc, plots):
     plt.rc('font', size=14)
     plt.figure(figsize=(5,4.5))
 
-    # a = fig.add_subplot(1, 2, 1)
     H, xedges, yedges = np.histogram2d(avg_loc[1:,0], avg_loc[1:,1], bins=(40, 40), normed = True)
     H = np.copy(H.T)
-    # plt.tick_params(axis=u'both', which=u'both',bottom=u'off', left=u'off', labelbottom=u'off', labelleft=u'off')
-    # plt.xlabel("longitude")
-    # plt.ylabel("latitude")
-    # plt.imshow(H, interpolation='none', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
-
-    #a = fig.add_subplot(1, 2, 2)
     Hout = gaussian_filter(H, 1.5)
     H = np.copy(Hout)
     cax = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
@@ -45,8 +38,8 @@ def spatial_Gaussian_filtering(avg_loc, plots):
     if plots:
         plt.show()
     else:
-        print("Spatial background saved at data/tmp/Fig_spatial_background.pdf")
-        pp = PdfPages('data/tmp/Fig_spatial_background.pdf')
+        print("Spatial background saved at data/pics/Fig_spatial_background.pdf")
+        pp = PdfPages('data/pics/Fig_spatial_background.pdf')
         pp.savefig()
         pp.close()
 
@@ -57,8 +50,6 @@ def spatial_Gaussian_filtering(avg_loc, plots):
 def temporal_FFT_IFFT(avg_time, plots):
     plt.rc('font', size=14)
     fig = plt.figure(figsize=(5,5))
-
-    #a = fig.add_subplot(1, 2, 1)
 
     # Temporal FFT-IFFT
     values, bins, patch = plt.hist(avg_time[1:], bins = 100, normed=True)
@@ -73,7 +64,6 @@ def temporal_FFT_IFFT(avg_time, plots):
     w[cutoff_idx] = 0
     y = irfft(w)
 
-    #a = fig.add_subplot(1, 2, 2)
     plt.plot(bins[0:100], y, color="red")
     plt.tick_params(axis=u'both', which=u'both', bottom=u'off',  labelbottom=u'off')
     plt.xlabel("time")
@@ -81,8 +71,8 @@ def temporal_FFT_IFFT(avg_time, plots):
     if plots:
         plt.show()
     else:
-        print("Temporal background saved at data/tmp/Fig_temporal_background.pdf")
-        pp = PdfPages('data/tmp/Fig_temporal_background.pdf')
+        print("Temporal background saved at data/pics/Fig_temporal_background.pdf")
+        pp = PdfPages('data/pics/Fig_temporal_background.pdf')
         pp.savefig()
         pp.close()
 
@@ -104,16 +94,14 @@ def compute_daily_space_time_histograms(dataset, day, ndays, tn_mean, tn_std, ln
 
     avg_time = np.zeros(1)
     avg_loc = np.zeros((1,2))
-
-
     for i in xrange(ndays):
-
         th_l = day + timedelta(days=i)
         th_u = day + timedelta(days=i+1)
         selection = dataset.ix[(dataset.time > th_l) & (dataset.time <= th_u),:]
         selection.index = xrange(selection.shape[0])
         selection = selection.sort_values("time")
         selection.loc[:,"time"] = (selection["time"].values - min(selection["time"].values))
+        print "Day " + str(th_l) + " tweets: " + str(len(selection.time))
 
         aux = np.zeros(shape=(selection.shape[0], 2))
         for n in xrange(selection.shape[0]):
@@ -139,9 +127,9 @@ def compute_daily_space_time_histograms(dataset, day, ndays, tn_mean, tn_std, ln
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Preprocess tweets')
-    parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2014_tweets.pkl')
-    parser.add_argument('-day', metavar='day', type=str, default='20/09/2014')
-    parser.add_argument('-ndays', metavar='ndays', type=int, default=4)
+    parser.add_argument('-fileName', metavar='fileName', type=str, default='background_MERCE2015.pkl')
+    parser.add_argument('-day', metavar='day', type=str, default='14/09/2015')
+    parser.add_argument('-ndays', metavar='ndays', type=int, default=3)
     parser.add_argument('-plots', metavar='plots', type=bool, default=False)
     args = parser.parse_args()
     fileName = args.fileName

@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     ## HYPERPARAMETERS
     # Proportions
-    a_pi = np.array([0.1/K]*K)
+    a_pi = np.array([100.]*K)
 
     # Space hyperparameters
     ln = dataset.as_matrix(["x", "y"])

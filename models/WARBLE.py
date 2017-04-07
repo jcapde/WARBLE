@@ -160,7 +160,7 @@ def inference_wback(It, tn, ln, wnm, a_pi, T, K, m_mu, beta_mu, W_Delta, nu_Delt
     return en_, bounds
 
 
-def inference_wback_topics(It, tn, ln, wnm, a_pi, T, K, m_mu, beta_mu, W_Delta, nu_Delta, m_tau, beta_tau, a_lambda, b_lambda, a_theta, a_phi, values, bins, H, xedges, yedges):
+def inference_wback_summary(It, tn, ln, wnm, a_pi, T, K, m_mu, beta_mu, W_Delta, nu_Delta, m_tau, beta_tau, a_lambda, b_lambda, a_theta, a_phi, values, bins, H, xedges, yedges):
 
     N, M = wnm.shape
 
@@ -217,7 +217,7 @@ def inference_wback_topics(It, tn, ln, wnm, a_pi, T, K, m_mu, beta_mu, W_Delta, 
             xbin = np.digitize(np.array([ln[n,0]]),xedges)[0]-2
             ybin = np.digitize(np.array([ln[n,1]]),yedges)[0]-2
             aux[K-1] *=  H[xbin, ybin]
-            zbin = np.digitize(np.array([tn[n]]),bins)[0]-1
+            zbin = np.digitize(np.array([tn[n]]),bins)[0]-2
             #print "time", values[zbin]
             aux[K-1] *= (values[zbin]+ np.finfo(np.float32).eps)
             # Textual
@@ -250,5 +250,5 @@ def inference_wback_topics(It, tn, ln, wnm, a_pi, T, K, m_mu, beta_mu, W_Delta, 
         it +=1
         bounds.append(lwbound)
 
-    return en_, bounds, thetak_, phik_
+    return en_, thetak_, phik_,  mk_, betamuk_, nuk_, Wk_, mtauk_, betatauk_, ak_, bk_
 

@@ -63,5 +63,7 @@ def evaluate_recall_event(dfcomp,en_est):
     accum = []
     for i in set(clas.tclass):
         taggedi  = clas.ix[clas.tclass==i, :]
-        accum.append((i,max([recallij(taggedi,clust.ix[clust.cluster == j, :]) for j in set(clust.cluster)])))
+        recalls = [recallij(taggedi,clust.ix[clust.cluster == j, :]) for j in set(clust.cluster)]
+        clustmax = clust.ix[clust.cluster == np.argmax(recalls), :]
+        accum.append((i, np.argmax(recalls),len(clustmax.ix[clustmax .tweet_id.isin(taggedi.tweet_id)]), max(recalls) ))
     return accum

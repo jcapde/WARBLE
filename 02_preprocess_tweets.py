@@ -32,17 +32,19 @@ def build_dataset(fileName, labelTweets):
 
     return combined_df
 
-def filter_by_day(dataset, day):
+
+
+def filter_by_day(tmpdf, day):
     th_l = day
     th_u = day + timedelta(days=1)
-    dataset = dataset.ix[(dataset.time>th_l) & (dataset.time<=th_u),:]
-    dataset.index = range(len(dataset))
-    return dataset.sort_values("time")
+    tmpdf = tmpdf.ix[(tmpdf.time>th_l) & (tmpdf.time<=th_u),:]
+    tmpdf.index = range(len(tmpdf))
+    return tmpdf
 
-def remove_user_duplicates(dataset):
-    dataset = dataset.drop_duplicates("user_id")
-    dataset.index = range(len(dataset))
-    return dataset
+def remove_user_duplicates(tmpdf):
+    tmpdf = tmpdf.drop_duplicates("user_id")
+    tmpdf.index = range(len(tmpdf))
+    return tmpdf
 
 def transform_space_time(dataset):
 
@@ -153,9 +155,9 @@ def user_tweet_matrix(dataset):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Preprocess tweets')
-    parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2014_tweets.pkl')
-    parser.add_argument('-labelTweets', metavar='labelTweets', type=str, default='Twitter-DS/MERCE/2014/labeled_events.csv')
-    parser.add_argument('-day', metavar='day', type=str, default='24/09/2014')
+    parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2015_tweets.pkl')
+    parser.add_argument('-labelTweets', metavar='labelTweets', type=str, default='Twitter-DS/MERCE/2015/labeled_events.csv')
+    parser.add_argument('-day', metavar='day', type=str, default='24/09/2015')
 
     args = parser.parse_args()
     fileName = args.fileName
@@ -164,32 +166,25 @@ if __name__ == "__main__":
 
     # Build dataset
     dataset = build_dataset(fileName, labelTweets)
-    print dataset.shape
-    #print dataset.sort_values("time").tail()
+    print "Initial number of tweets: " + str(dataset.shape[0])
 
     # Filter out tweets
     dataset = filter_by_day(dataset, day)
-    print dataset.shape
+    print "Filtered tweets from " + str(args.day) +": "+ str(dataset.shape[0])
 
     dataset = remove_user_duplicates(dataset)
-    print dataset.shape
 
     # Transform spatio-temporal dimensions
     dataset, tn_mean, tn_std, ln_mean, ln_std = transform_space_time(dataset)
-    print dataset.shape
-
     dataset = remove_space_outliers(dataset)
-    print dataset.shape
 
     # Get cleaned text
     dataset = get_clean_text(dataset)
-    print dataset.shape
+    print "Final list of cleaned tweets: " + str(dataset.shape[0])
 
     # Create corpus, remove words with low occurence and remove tweets without words
     vocabulary, corpus, dataset = get_corpus(dataset)
     w = create_word_matrix(vocabulary, corpus, dataset)
-    print dataset.shape
-    print w.shape
 
     # Create user - tweetID matrix for Tweet-SCAN
     user_tweet = user_tweet_matrix(dataset)
