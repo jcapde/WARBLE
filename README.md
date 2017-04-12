@@ -202,8 +202,8 @@ python 08_plot_results.py
 </tr>
 
 <tr>
-<td><img src="https://github.com/jcapde/WARBLE/blob/master/data/pics/setmatch.png" align="left" height="250" width="250" ></td>
-<td><img src="https://github.com/jcapde/WARBLE/blob/master/data/pics/bcubed.png" align="right" height="250" width="250" ></td>
+<td><img src="https://github.com/jcapde/WARBLE/blob/master/data/pics/setmatch.png" align="left" height="250" width="350" ></td>
+<td><img src="https://github.com/jcapde/WARBLE/blob/master/data/pics/bcubed.png" align="right" height="250" width="350" ></td>
 </tr>
 </table>
 
@@ -216,7 +216,7 @@ Model E: Teet-SCAN;
 
 <table style="width:100%" align="center">
 <tr>
-<td><img src="https://github.com/jcapde/WARBLE/blob/master/data/pics/spacetime.png" align="right" height="300" width="300" ></td>
+<td><img src="https://github.com/jcapde/WARBLE/blob/master/data/pics/spacetime.png" align="right" height="400" width="700" ></td>
 </tr>
 </table>
 
