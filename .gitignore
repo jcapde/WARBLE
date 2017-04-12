@@ -3,8 +3,12 @@ ZZ_*
 .idea/
 data/input/Twitter-DS_MERCE_2014_tweets.json
 data/input/Twitter-DS_MERCE_2015_tweets.json
-docs/
 data/input/Twitter-DS_MERCE_2015_tweets.pkl
 data/input/Twitter-DS_MERCE_2014_tweets.pkl
+docs/
+data/input/All_Twitter-DS_MERCE_2015_tweets.pkl
+data/input/All_Twitter-DS_MERCE_2014_tweets.pkl
+data/input/Pub_Twitter-DS_MERCE_2015_tweets.pkl
+data/input/Pub_Twitter-DS_MERCE_2014_tweets.pkl
 data/tmp/*
-/data/input/background_MERCE2015.pkl
+

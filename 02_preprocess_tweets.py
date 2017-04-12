@@ -20,16 +20,10 @@ def build_dataset(fileName, labelTweets):
     # Load raw tweets
     df = read_pickle('data/input/' + fileName)
     # Load labels
-    label_df= DataFrame.from_csv('data/input/' + labelTweets, sep = ",")
+    label_df= DataFrame.from_csv('data/input/' + labelTweets, sep = ",", index_col=None)
     # Built labeled dataset with event and non-event tweets
     combined_df = df.merge(label_df, how="left", on="tweet_id")
     combined_df.tclass = combined_df.tclass.fillna("NonEvent")
-
-    # Consider only labeled events with more than 10 tweets
-    indices_eval = np.where(combined_df.groupby("tclass").count()["tweet_id"]<10)[0]
-    for tclass in combined_df.groupby("tclass").count().ix[indices_eval,:].index:
-        combined_df.ix[combined_df.tclass==tclass, "tclass"] = "NonEvent"
-
     return combined_df
 
 
@@ -147,17 +141,21 @@ def create_word_matrix(vocabulary, corpus, dataset):
     return wnm
 
 
-def user_tweet_matrix(dataset):
-    D = dataset.ix[:, ("tweet_id","user_id")]
-    D.index = range(len(D))
-    return D
+def remove_labels(dataset):
 
+    # Consider only labeled events with more than 10 tweets
+    indices_eval = np.where(dataset.groupby("tclass").count()["tweet_id"]<10)[0]
+    for tclass in dataset.groupby("tclass").count().ix[indices_eval,:].index:
+        dataset.ix[dataset.tclass==tclass, "tclass"] = "NonEvent"
+
+    return dataset
+        
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Preprocess tweets')
-    parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2015_tweets.pkl')
-    parser.add_argument('-labelTweets', metavar='labelTweets', type=str, default='Twitter-DS/MERCE/2015/labeled_events.csv')
-    parser.add_argument('-day', metavar='day', type=str, default='24/09/2015')
+    parser.add_argument('-fileName', metavar='fileName', type=str, default='All_Twitter-DS_MERCE_2014_tweets.pkl')
+    parser.add_argument('-labelTweets', metavar='labelTweets', type=str, default='Twitter-DS/MERCE/2014/labeled_events_day_24.csv')
+    parser.add_argument('-day', metavar='day', type=str, default='24/09/2014')
 
     args = parser.parse_args()
     fileName = args.fileName
@@ -186,8 +184,8 @@ if __name__ == "__main__":
     vocabulary, corpus, dataset = get_corpus(dataset)
     w = create_word_matrix(vocabulary, corpus, dataset)
 
-    # Create user - tweetID matrix for Tweet-SCAN
-    user_tweet = user_tweet_matrix(dataset)
+    # Remove label from events with less than 10 tweets
+    dataset = remove_labels(dataset)
 
     #Create for tweets-SCAN
     pickle.dump([tn_mean, tn_std, ln_mean, ln_std], open('data/tmp/spacetime_stats.pkl', 'wb'))
@@ -195,5 +193,4 @@ if __name__ == "__main__":
     pickle.dump(dataset, open('data/tmp/dataset.pkl','wb'))
     pickle.dump(vocabulary,open('data/tmp/vocabulary.pkl','wb'))
     pickle.dump(corpus,open('data/tmp/corpus.pkl','wb'))
-    pickle.dump(user_tweet, open('data/tmp/user_tweet.pkl', 'wb'))
 

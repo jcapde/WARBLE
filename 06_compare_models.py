@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Learn topics from tweets')
     parser.add_argument('-T', metavar='T', type=int, default=30)
-    parser.add_argument('-K', metavar='K', type=int, default=6)
+    parser.add_argument('-K', metavar='K', type=int, default=8)
     parser.add_argument('-maxIter', metavar='maxIter', type=int, default=50)
     args = parser.parse_args()
 
@@ -27,8 +27,6 @@ if __name__ == "__main__":
     w = pickle.load(open('data/tmp/w.pkl', 'rb'))
     # Space time stats
     _, tn_std, _, ln_std = pickle.load(open('data/tmp/spacetime_stats.pkl', 'rb'))
-    # User-Tweet relationship for Tweet-SCAN
-    user_tweet = pickle.load(open('data/tmp/user_tweet.pkl', 'rb'))
     # Background
     xs, ys, HistLoc, ts, HistTemp = pickle.load(open('data/tmp/background.pkl','rb'))
     # Phi Matrix for non-joint topic estimation
@@ -76,6 +74,9 @@ if __name__ == "__main__":
     epsilon2 = 3600./tn_std
     epsilon3 = 0.9
     MinPts = 6
+
+    user_tweet =  dataset.ix[:, ("tweet_id", "user_id")]
+    user_tweet.index = range(len(user_tweet))
 
     ## Run models
     lwbound = [None]*4

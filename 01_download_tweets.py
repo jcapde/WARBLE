@@ -12,16 +12,16 @@ from datetime import datetime
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Download tweets from Twitter')
-    parser.add_argument('-filePath', metavar='filePath', type=str, default='Twitter-DS/MERCE/2015/tweets.txt')
+    parser.add_argument('-filePath', metavar='filePath', type=str, default='data/input/Twitter-DS/MERCE/2015/tweets.txt')
     args = parser.parse_args()
 
     filepath = args.filePath
-    fileoutput = filepath.replace("/","_").replace(".txt",".json")
+    fileoutput = "/".join(filepath.split("/")[2:]).replace("/","_").replace(".txt",".json")
 
     with open('./conf/twitter-keys.json', 'r') as app_file:
         app = json.load(app_file)
 
-    with open('./data/input/'+ filepath) as in_file:
+    with open(filepath) as in_file:
         tweet_ids = in_file.readlines()
 
     twitter = Twython(app["CONSUMER_KEY"], app["CONSUMER_SECRET"], oauth_version=2)
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     text = []
     hashtags = []
 
-    for tweet_id in tweet_ids[0:1000]:
+    for tweet_id in tweet_ids:
         start_time = time.time()
         id = tweet_id[:-1]
         print(str(n) + "/" + str(len(tweet_ids)))
