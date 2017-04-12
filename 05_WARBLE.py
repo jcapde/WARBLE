@@ -18,9 +18,9 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Learn topics from tweets')
     parser.add_argument('-T', metavar='T', type=int, default=30)
-    parser.add_argument('-K', metavar='K', type=int, default=6)
+    parser.add_argument('-K', metavar='K', type=int, default=8)
     parser.add_argument('-maxIter', metavar='maxIter', type=int, default=50)
-    parser.add_argument('-day', metavar='day', type=str, default='24/09/2015')
+    parser.add_argument('-day', metavar='day', type=str, default='24/09/2014')
 
     args = parser.parse_args()
     day = datetime.strptime(args.day,'%d/%m/%Y')

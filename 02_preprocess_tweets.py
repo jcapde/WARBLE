@@ -187,7 +187,6 @@ if __name__ == "__main__":
     # Remove label from events with less than 10 tweets
     dataset = remove_labels(dataset)
 
-    #Create for tweets-SCAN
     pickle.dump([tn_mean, tn_std, ln_mean, ln_std], open('data/tmp/spacetime_stats.pkl', 'wb'))
     pickle.dump(w, open('data/tmp/w.pkl', 'wb'))
     pickle.dump(dataset, open('data/tmp/dataset.pkl','wb'))

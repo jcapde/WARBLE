@@ -127,7 +127,7 @@ def compute_daily_space_time_histograms(dataset, day, ndays, tn_mean, tn_std, ln
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Preprocess tweets')
-    parser.add_argument('-fileName', metavar='fileName', type=str, default='Twitter-DS_MERCE_2014_tweets.pkl')
+    parser.add_argument('-fileName', metavar='fileName', type=str, default='All_Twitter-DS_MERCE_2014_tweets.pkl')
     parser.add_argument('-day', metavar='day', type=str, default='20/09/2014')
     parser.add_argument('-ndays', metavar='ndays', type=int, default=4)
     parser.add_argument('-plots', metavar='plots', type=bool, default=False)
