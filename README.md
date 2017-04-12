@@ -95,10 +95,20 @@ python -fileName data/input/tweets.pkl -day 20/09/2014 -ndays 4 -plot false 03_c
 
 - save spatiotemporal backgrounds in `data/tmp/background.pkl`
 
- ![Spatial background](data/pics/sp.png =250x) 
- ![Temporal background](data/pics/tmp.png =250x)
- 
+<table style="width:100%" align="center">
+<tr>
+<td>Temporal Background</td>
+<td>Spatial Background</td>
+</tr>
 
+<tr>
+<td><img src="https://github.com/jcapde/WARBLE/blob/master/data/pics/sp.png" align="left" height="250" width="250" ></td>
+<td><img src="https://github.com/jcapde/WARBLE/blob/master/data/pics/tmp.png" align="right" height="250" width="250" ></td>
+</tr>
+</table>
+
+Learning topics
+----
 
 5- *04_learn_topics.py* learns topic-word and topic-document distributions to be used for Tweet-SCAN and models without joint topic-event learning scheme.
 
