@@ -12,3 +12,4 @@ data/input/Pub_Twitter-DS_MERCE_2015_tweets.pkl
 data/input/Pub_Twitter-DS_MERCE_2014_tweets.pkl
 data/tmp/*
 
+data/pics/*.pdf
